@@ -8,6 +8,7 @@ import { StorageService } from '../services/storage.service';
 import { supabaseAdmin } from '../config/supabase';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { AppError } from '../middleware/error.middleware';
+import { uploadFileToStorage, cleanupTempFile } from '../utils/file-upload';
 
 export const uploadFile = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
@@ -25,10 +26,10 @@ export const uploadFile = async (req: AuthRequest, res: Response, next: NextFunc
     const fileId = uuidv4();
 
     // Upload file to Supabase storage
-    const storagePath = await StorageService.uploadFileFromPath(
+    const storagePath = await uploadFileToStorage(
       userId,
       fileId,
-      req.file.path,
+      req.file,
       req.file.mimetype
     );
 
@@ -69,7 +70,7 @@ export const uploadFile = async (req: AuthRequest, res: Response, next: NextFunc
     });
 
     // Clean up temporary file
-    await fs.unlink(req.file.path);
+    await cleanupTempFile(req.file);
 
     // Emit real-time update
     const io = req.app.get('io');
@@ -84,8 +85,8 @@ export const uploadFile = async (req: AuthRequest, res: Response, next: NextFunc
     });
   } catch (error: any) {
     // Clean up temporary file on error
-    if (req.file?.path) {
-      await fs.unlink(req.file.path).catch(() => {});
+    if (req.file) {
+      await cleanupTempFile(req.file);
     }
     next(error);
   }
@@ -832,10 +833,10 @@ export const uploadNewVersion = async (req: AuthRequest, res: Response, next: Ne
 
     // Upload new version to storage
     const versionStoragePath = StorageService.generateStoragePath(userId, fileId, newVersionNumber);
-    await StorageService.uploadFileFromPath(
+    await uploadFileToStorage(
       userId,
       `${fileId}/v${newVersionNumber}`,
-      req.file.path,
+      req.file,
       req.file.mimetype
     );
 
@@ -863,7 +864,7 @@ export const uploadNewVersion = async (req: AuthRequest, res: Response, next: Ne
     }
 
     // Clean up temporary file
-    await fs.unlink(req.file.path);
+    await cleanupTempFile(req.file);
 
     // Log activity
     await SupabaseService.createActivity({
@@ -881,8 +882,8 @@ export const uploadNewVersion = async (req: AuthRequest, res: Response, next: Ne
     });
   } catch (error: any) {
     // Clean up temporary file on error
-    if (req.file?.path) {
-      await fs.unlink(req.file.path).catch(() => {});
+    if (req.file) {
+      await cleanupTempFile(req.file);
     }
     next(error);
   }
