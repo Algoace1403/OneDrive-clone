@@ -19,7 +19,10 @@ import commentRoutes from './routes/comment.routes';
 import publicRoutes from './routes/public.routes';
 import { errorHandler } from './middleware/error.middleware';
 
-dotenv.config();
+// Only load dotenv in development
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 const app = express();
 const httpServer = createServer(app);
