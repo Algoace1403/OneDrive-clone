@@ -3,7 +3,7 @@ import cors from 'cors';
 // Remove dotenv import for production
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import fs from 'fs';
+// fs import removed - not needed in serverless
 import { StorageService } from './services/storage.service';
 
 import authRoutes from './routes/auth.routes';
@@ -38,11 +38,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Create upload directory if it doesn't exist
-const uploadDir = process.env.UPLOAD_PATH || './uploads';
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+// Upload directory creation handled by multer config
 
 // Serve static files for testing
 app.use(express.static('public'));
