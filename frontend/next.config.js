@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   images: {
     remotePatterns: [
       {
@@ -8,15 +9,19 @@ const nextConfig = {
         port: '5001',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
   },
   async rewrites() {
-    return [
+    return process.env.NODE_ENV === 'development' ? [
       {
         source: '/api/:path*',
         destination: 'http://localhost:5001/api/:path*',
       },
-    ];
+    ] : [];
   },
 }
 
