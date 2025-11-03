@@ -28,6 +28,7 @@ export default function SharedPage() {
   const [tab, setTab] = useState<'with-me' | 'by-me'>('with-me')
   const [shareFile, setShareFile] = useState<any>(null)
   const [bulkPermission, setBulkPermission] = useState<'view' | 'edit' | 'comment'>('view')
+  const [loading, setLoading] = useState(false)
   const reqController = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -47,40 +48,7 @@ export default function SharedPage() {
     }
   }, [socket])
 
-  const loadSharedFiles = async () => {
-    try {
-      setLoading(true)
-      if (reqController.current) reqController.current.abort()
-      reqController.current = new AbortController()
-      const signal = reqController.current.signal
-      const [withMe, byMe] = await Promise.all([
-        apiClient.get('/files/shared', { signal }).catch((e) => { if (e.name === 'CanceledError' || e.code === 'ERR_CANCELED') return { data: {} }; throw e }),
-        apiClient.get('/files/shared/by-me', { signal }).catch((e) => { if (e.name === 'CanceledError' || e.code === 'ERR_CANCELED') return { data: {} }; throw e }),
-      ])
-      const withMeItems = withMe.data.files || []
-      const byMeItems = byMe.data.files || []
-      const allIds = [...withMeItems, ...byMeItems].map((i: any) => i.id || i._id).filter(Boolean)
-      let favs: Record<string, boolean> = {}
-      if (allIds.length > 0) {
-        const resFavs = await apiClient.get(`/files/favorites/check?ids=${allIds.join(',')}`, { signal }).catch(() => ({ data: { favorites: {} } }))
-        favs = resFavs.data?.favorites || {}
-      }
-      const annot = (arr: any[]) => arr.map((i: any) => ({ ...i, isFavorite: !!favs[i.id || i._id] }))
-      setSharedFiles(annot(withMeItems))
-      setSharedByMe(annot(byMeItems))
-    } catch (error) {
-      console.error('Error loading shared files:', error)
-      toast({
-        title: 'Error',
-        description: 'Failed to load shared files',
-        variant: 'destructive'
-      })
-      setSharedFiles([])
-      setSharedByMe([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  // loadSharedFiles is no longer needed - using React Query instead
 
   if (sharedQuery.isLoading) {
     return (
@@ -205,7 +173,7 @@ export default function SharedPage() {
                     await Promise.all(shares.map((s: any) => apiClient.patch(`/share/${id}/${s.id}`, { permission: bulkPermission })))
                   }))
                   toast({ title: 'Permissions updated', description: `Set to ${bulkPermission} for selected item(s)` })
-                  await loadSharedFiles()
+                  queryClient.invalidateQueries({ queryKey: ['shared-lists'] })
                 } catch (e) {
                   toast({ title: 'Error', description: 'Failed to update permissions', variant: 'destructive' })
                 } finally {

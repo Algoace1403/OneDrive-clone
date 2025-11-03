@@ -51,7 +51,6 @@ export function useFilesList(params: { folderId?: string | null; searchQuery?: s
     queryKey: ['files-list', { folderId, searchQuery, filters, sort }],
     queryFn: ({ signal }) => fetchFilesAnnotated({ folderId, searchQuery, filters, sort, signal }),
     staleTime: 60_000,
-    keepPreviousData: true,
   })
 }
 
@@ -101,7 +100,6 @@ export function useHomeList(params: { searchQuery?: string; filters?: FilesFilte
     queryKey: ['home-list', { searchQuery, filters, sort }],
     queryFn: ({ signal }) => fetchHomeAnnotated({ searchQuery, filters, sort, signal }),
     staleTime: 60_000,
-    keepPreviousData: true,
   })
 }
 
@@ -128,14 +126,14 @@ export function useSharedLists() {
     queryKey: ['shared-lists'],
     queryFn: ({ signal }) => fetchSharedAnnotated({ signal }),
     staleTime: 60_000,
-    keepPreviousData: true,
+    initialData: { sharedWithMe: [], sharedByMe: [] },
   })
 }
 
 async function fetchFavoritesAnnotated(params: { signal?: AbortSignal }) {
   const { signal } = params
   const res = await apiClient.get('/files/favorites', { signal }).catch((e) => {
-    if ((e as any)?.name === 'CanceledError' || (e as any)?.code === 'ERR_CANCELED') return { data: {} as any }
+    if ((e as any)?.name === 'CanceledError' || (e as any)?.code === 'ERR_CANCELED') return { data: { files: [] } }
     throw e
   })
   const items = res.data?.files || []
@@ -147,7 +145,7 @@ export function useFavoritesList() {
     queryKey: ['favorites-list'],
     queryFn: ({ signal }) => fetchFavoritesAnnotated({ signal }),
     staleTime: 60_000,
-    keepPreviousData: true,
+    initialData: [],
   })
 }
 

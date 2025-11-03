@@ -1,5 +1,5 @@
 import { useState, DragEvent } from 'react'
-import { FileText, Download, Share2, Star, Trash2, MoreVertical, Move, Users } from 'lucide-react'
+import { FileText, Download, Share2, Star, Trash2, MoreVertical, Move, Users, History } from 'lucide-react'
 import { cn, formatBytes, getFileIcon, getFileTypeColor } from '@/lib/utils'
 import { Checkbox } from '@/components/ui/checkbox'
 import {

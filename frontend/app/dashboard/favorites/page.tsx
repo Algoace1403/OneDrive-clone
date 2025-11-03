@@ -221,7 +221,7 @@ export default function FavoritesPage() {
           onOpenChange={(open) => {
             if (!open) {
               setRenameFile(null)
-              loadFavorites()
+              queryClient.invalidateQueries({ queryKey: ['favorites-list'] })
             }
           }}
           file={renameFile}
@@ -236,7 +236,7 @@ export default function FavoritesPage() {
           files={deleteFiles}
           onComplete={() => {
             setDeleteFiles([])
-            loadFavorites()
+            queryClient.invalidateQueries({ queryKey: ['favorites-list'] })
           }}
         />
       )}
