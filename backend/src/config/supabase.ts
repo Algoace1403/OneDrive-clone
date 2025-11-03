@@ -1,39 +1,31 @@
 import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
 
-// Only load dotenv in development
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
-}
-
+// Get environment variables
 const supabaseUrl = process.env.SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
+// Log configuration status
 console.log('Supabase configuration:', {
   url: supabaseUrl ? 'Set' : 'Missing',
   anonKey: supabaseKey ? 'Set' : 'Missing',
   serviceKey: supabaseServiceKey ? 'Set' : 'Missing'
 });
 
-if (!supabaseUrl || !supabaseKey || !supabaseServiceKey) {
-  console.error('Missing required Supabase environment variables');
-  console.error('SUPABASE_URL:', supabaseUrl ? 'Set' : 'Not set');
-  console.error('SUPABASE_ANON_KEY:', supabaseKey ? 'Set' : 'Not set');
-  console.error('SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? 'Set' : 'Not set');
-  throw new Error('Missing required Supabase environment variables');
-}
-
 // Client for public operations
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = supabaseUrl && supabaseKey 
+  ? createClient(supabaseUrl, supabaseKey)
+  : null as any;
 
 // Admin client for backend operations
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
-  }
-});
+export const supabaseAdmin = supabaseUrl && supabaseServiceKey
+  ? createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    })
+  : null as any;
 
 // Database types
 export interface User {

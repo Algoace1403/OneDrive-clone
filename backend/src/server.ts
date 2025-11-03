@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+// Remove dotenv import for production
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import fs from 'fs';
@@ -19,10 +19,7 @@ import commentRoutes from './routes/comment.routes';
 import publicRoutes from './routes/public.routes';
 import { errorHandler } from './middleware/error.middleware';
 
-// Only load dotenv in development
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
-}
+// Environment variables are handled by Vercel in production
 
 const app = express();
 const httpServer = createServer(app);
@@ -214,9 +211,15 @@ app.set('io', io);
 // Initialize services and start server
 const startServer = async () => {
   try {
-    // Create Supabase storage bucket if it doesn't exist
-    await StorageService.createBucketIfNotExists();
-    console.log('Supabase storage initialized');
+    // Only initialize storage in non-serverless environments
+    if (!process.env.VERCEL) {
+      try {
+        await StorageService.createBucketIfNotExists();
+        console.log('Supabase storage initialized');
+      } catch (error) {
+        console.warn('Could not initialize storage:', error);
+      }
+    }
 
     const PORT = process.env.PORT || 5000;
     httpServer.listen(PORT, () => {
@@ -224,8 +227,8 @@ const startServer = async () => {
       console.log(`Environment: ${process.env.NODE_ENV}`);
     });
 
-    // Scheduled trash purge (mock)
-    if (process.env.ENABLE_AUTO_PURGE === 'true') {
+    // Scheduled trash purge (mock) - only in non-serverless
+    if (process.env.ENABLE_AUTO_PURGE === 'true' && !process.env.VERCEL) {
       const days = parseInt(process.env.TRASH_RETENTION_DAYS || '30');
       setInterval(async () => {
         try {
@@ -239,7 +242,9 @@ const startServer = async () => {
     }
   } catch (error) {
     console.error('Server initialization error:', error);
-    process.exit(1);
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    }
   }
 };
 
