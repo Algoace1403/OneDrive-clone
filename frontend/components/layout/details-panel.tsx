@@ -26,8 +26,8 @@ export function DetailsPanel({ file, isOpen, onClose }: DetailsPanelProps) {
   const colorClass = getFileTypeColor(file.name, file.isFolder)
 
   return (
-    <div className={`fixed right-0 top-0 h-full w-80 bg-background border-l shadow-lg z-50 details-panel ${isOpen ? 'open' : 'closed'}`}>
-      <div className="p-4 border-b">
+    <div className={`fixed right-0 top-0 h-full w-80 bg-background shadow-lg z-50 details-panel ${isOpen ? 'open' : 'closed'}`}>
+      <div className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <IconComponent className={`h-10 w-10 ${colorClass}`} />
@@ -50,7 +50,7 @@ export function DetailsPanel({ file, isOpen, onClose }: DetailsPanelProps) {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1">
-        <TabsList className="w-full rounded-none border-b">
+        <TabsList className="w-full rounded-none">
           <TabsTrigger value="details" className="flex-1">Details</TabsTrigger>
           <TabsTrigger value="activity" className="flex-1">Activity</TabsTrigger>
         </TabsList>
@@ -78,7 +78,7 @@ export function DetailsPanel({ file, isOpen, onClose }: DetailsPanelProps) {
               </div>
             </div>
 
-            <Separator />
+            {/* Separator removed */}
 
             {/* Storage info */}
             <div>
@@ -98,7 +98,7 @@ export function DetailsPanel({ file, isOpen, onClose }: DetailsPanelProps) {
               </div>
             </div>
 
-            <Separator />
+            {/* Separator removed */}
 
             {/* Sharing info */}
             <div>
@@ -162,7 +162,7 @@ export function DetailsPanel({ file, isOpen, onClose }: DetailsPanelProps) {
               </>
             )}
 
-            <Separator />
+            {/* Separator removed */}
 
             {/* Version info */}
             {!file.isFolder && file.versions && (

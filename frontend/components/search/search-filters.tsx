@@ -61,7 +61,7 @@ export function SearchFilters({ onSearch }: SearchFiltersProps) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-        className="w-full bg-secondary border border-input pl-10 pr-20 h-9 text-foreground placeholder:text-muted-foreground focus:bg-muted focus:ring-1 focus:ring-[hsl(var(--ring))] rounded-full"
+        className="w-full bg-secondary pl-10 pr-20 h-9 text-foreground placeholder:text-muted-foreground focus:bg-muted rounded-full"
       />
       
       <Popover open={showFilters} onOpenChange={setShowFilters}>

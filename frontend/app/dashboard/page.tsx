@@ -61,10 +61,11 @@ export default function DashboardPage() {
   const loadFiles = async () => {
     try {
       setLoading(true)
-      
+
       if (reqController.current) reqController.current.abort()
       reqController.current = new AbortController()
       const signal = reqController.current.signal
+      const thisController = reqController.current
 
       if (searchQuery) {
         let endpoint = `/files/search?q=${encodeURIComponent(searchQuery)}`
@@ -72,47 +73,55 @@ export default function DashboardPage() {
         if (filters?.owner && filters.owner !== 'all') endpoint += `&owner=${filters.owner}`
         if (filters?.syncStatus && filters.syncStatus !== 'all') endpoint += `&status=${filters.syncStatus}`
         if (sort) endpoint += `&sort=${sort.field}&direction=${sort.direction}`
-        const response = await apiClient.get(endpoint, { signal }).catch((e) => {
-          if (e.name === 'CanceledError' || e.code === 'ERR_CANCELED') return { data: {} }
-          throw e
-        })
+        const response = await apiClient.get(endpoint, { signal })
+        if (reqController.current !== thisController) return // stale
         const items = response.data.files || []
-        // Annotate with share counts and favorites for Sharing column and stars
         const ids = items.map((i: any) => i.id || i._id).filter(Boolean)
         let counts: Record<string, number> = {}
         let favs: Record<string, boolean> = {}
         if (ids.length > 0) {
-          const meta = await apiClient.get(`/files/meta?ids=${ids.join(',')}`, { signal }).catch(() => ({ data: { counts: {}, favorites: {} } }))
-          counts = meta.data?.counts || {}
-          favs = meta.data?.favorites || {}
+          try {
+            const meta = await apiClient.get(`/files/meta?ids=${ids.join(',')}`, { signal })
+            if (reqController.current !== thisController) return // stale
+            counts = meta.data?.counts || {}
+            favs = meta.data?.favorites || {}
+          } catch {
+            counts = {}
+            favs = {}
+          }
         }
         const annotated = items.map((i: any) => ({ ...i, sharedCount: counts[i.id || i._id] || 0, isFavorite: !!favs[i.id || i._id] }))
         setFiles(annotated)
         setFolders([])
       } else {
-        // Load recent files
-        const response = await apiClient.get('/files/recent?limit=10', { signal }).catch((e) => {
-          if (e.name === 'CanceledError' || e.code === 'ERR_CANCELED') return { data: {} }
-          throw e
-        })
+        const response = await apiClient.get('/files/recent?limit=10', { signal })
+        if (reqController.current !== thisController) return // stale
         const items = response.data.files || []
         const ids = items.map((i: any) => i.id || i._id).filter(Boolean)
         let counts: Record<string, number> = {}
         let favs: Record<string, boolean> = {}
         if (ids.length > 0) {
-          const meta = await apiClient.get(`/files/meta?ids=${ids.join(',')}`, { signal }).catch(() => ({ data: { counts: {}, favorites: {} } }))
-          counts = meta.data?.counts || {}
-          favs = meta.data?.favorites || {}
+          try {
+            const meta = await apiClient.get(`/files/meta?ids=${ids.join(',')}`, { signal })
+            if (reqController.current !== thisController) return // stale
+            counts = meta.data?.counts || {}
+            favs = meta.data?.favorites || {}
+          } catch {
+            counts = {}
+            favs = {}
+          }
         }
         const annotated = items.map((i: any) => ({ ...i, sharedCount: counts[i.id || i._id] || 0, isFavorite: !!favs[i.id || i._id] }))
         setFiles(annotated)
         setFolders([])
       }
-    } catch (error) {
+      setLoading(false)
+    } catch (error: any) {
+      // Ignore aborted requests so the next request controls loading state
+      if (error?.name === 'CanceledError' || error?.code === 'ERR_CANCELED') return
       console.error('Error loading files:', error)
       setFiles([])
       setFolders([])
-    } finally {
       setLoading(false)
     }
   }

@@ -3,7 +3,7 @@ export function FileListSkeleton({ rows = 8 }: { rows?: number }) {
     <div className="w-full">
       <table className="w-full table-fixed">
         <thead className="bg-card sticky top-0 z-10">
-          <tr className="text-left text-sm text-muted-foreground border-b border-border">
+          <tr className="text-left text-sm text-muted-foreground">
             <th className="w-[40px] p-3"></th>
             <th className="w-[16px] p-0"></th>
             <th className="p-3 font-normal">Name</th>
@@ -14,7 +14,7 @@ export function FileListSkeleton({ rows = 8 }: { rows?: number }) {
         </thead>
         <tbody>
           {Array.from({ length: rows }).map((_, i) => (
-            <tr key={i} className="border-b border-border">
+            <tr key={i}>
               <td className="p-3">
                 <div className="h-4 w-4 rounded bg-muted animate-pulse" />
               </td>
@@ -40,4 +40,3 @@ export function FileListSkeleton({ rows = 8 }: { rows?: number }) {
     </div>
   )
 }
-

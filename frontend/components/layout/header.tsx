@@ -30,7 +30,7 @@ interface HeaderProps {
 }
 
 export function Header({ onSearch }: HeaderProps) {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const { viewMode, setViewMode } = useViewMode()
   const { query, setQuery } = useSearch()
   const { items, unreadCount, markAllRead } = useNotifications()
@@ -43,7 +43,7 @@ export function Header({ onSearch }: HeaderProps) {
   return (
     <>
       {/* Main header */}
-      <header className="flex h-16 items-center justify-between bg-background px-4 md:px-6 text-foreground overflow-x-hidden border-b border-border">
+      <header className="flex h-16 items-center justify-between bg-background px-4 md:px-6 text-foreground overflow-x-hidden">
         {/* Search */}
         <div className="relative w-full max-w-[480px] md:max-w-[520px] ml-0 md:ml-8">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -52,7 +52,7 @@ export function Header({ onSearch }: HeaderProps) {
             placeholder="Search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-secondary border border-input pl-10 pr-4 h-9 text-foreground placeholder:text-muted-foreground focus:bg-muted focus:ring-1 focus:ring-[hsl(var(--ring))] rounded-full"
+            className="w-full bg-secondary pl-10 pr-4 h-9 text-foreground placeholder:text-muted-foreground focus:bg-muted rounded-full"
           />
         </div>
         
@@ -177,19 +177,28 @@ export function Header({ onSearch }: HeaderProps) {
             </MenuContent>
           </Menu>
 
-          {/* User Profile avatar (initials) */}
-          <div
-            className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white font-medium text-sm cursor-pointer"
-            title={user?.name || 'Account'}
-          >
-            {user?.name?.charAt(0).toUpperCase()}{user?.name?.charAt(1)?.toUpperCase() || ''}
-          </div>
+          {/* User Profile avatar with menu */}
+          <Menu>
+            <MenuTrigger asChild>
+              <div
+                className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white font-medium text-sm cursor-pointer"
+                title={user?.name || 'Account'}
+              >
+                {user?.name?.charAt(0).toUpperCase()}{user?.name?.charAt(1)?.toUpperCase() || ''}
+              </div>
+            </MenuTrigger>
+            <MenuContent align="end" className="w-40">
+              <MenuLabel>Account</MenuLabel>
+              <MenuSeparator />
+              <MenuItem onClick={logout}>Logout</MenuItem>
+            </MenuContent>
+          </Menu>
         </div>
       </header>
 
       {/* Promotional banner below header */}
-      <div className="bg-background px-6 pb-2 border-b border-border">
-        <div className="flex items-center gap-3 bg-[hsl(var(--primary))] px-4 py-2 rounded text-sm text-[hsl(var(--primary-foreground))]">
+      <div className="bg-background px-6 pb-2">
+        <div className="flex items-center gap-3 bg-blue-900/80 px-4 py-2 rounded-lg text-sm text-white">
           <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
           </svg>
@@ -197,7 +206,8 @@ export function Header({ onSearch }: HeaderProps) {
           <span className="text-xs opacity-80">Start your trial now to get more storage for all your files and photos.</span>
           <Button 
             size="sm"
-            className="bg-[hsl(var(--primary-foreground))] text-[hsl(var(--primary))] hover:opacity-90 px-4 py-1 h-7 text-sm font-medium ml-auto"
+            variant="default"
+            className="ml-auto px-4 py-1 h-7 text-sm font-medium bg-white text-black dark:bg-black dark:text-white hover:bg-white hover:text-black dark:hover:bg-black dark:hover:text-white"
           >
             Start free trial
           </Button>

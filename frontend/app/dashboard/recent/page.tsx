@@ -2,14 +2,15 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/lib/api/client'
-import { FileGrid } from '@/components/files/file-grid'
 import { FileList } from '@/components/files/file-list'
 import { useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Loader2, Image, FileText, Video, Music } from 'lucide-react'
+import { Image, FileText, Video, Music } from 'lucide-react'
+import { FileGridSkeleton } from '@/components/files/file-grid-skeleton'
+import { FileListSkeleton } from '@/components/files/file-list-skeleton'
 
 export default function RecentPage() {
-  const viewMode = 'grid' // Default view mode
+  // Force tabular (list) view for Recent
   const [selectedFiles, setSelectedFiles] = useState<string[]>([])
 
   const searchParams = useSearchParams()
@@ -32,8 +33,8 @@ export default function RecentPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div className="h-full bg-background p-6">
+        <FileListSkeleton />
       </div>
     )
   }
@@ -59,7 +60,7 @@ export default function RecentPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 ml-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Recent Files</h1>
         <div className="flex gap-2 items-center text-sm">
@@ -80,18 +81,6 @@ export default function RecentPage() {
             </p>
           </div>
         </div>
-      ) : viewMode === 'grid' ? (
-        <FileGrid
-          files={data?.files || []}
-          folders={[]}
-          selectedFiles={selectedFiles}
-          onFileSelect={setSelectedFiles}
-          onFileClick={handleFileClick}
-          onDelete={handleDelete}
-          onFavorite={handleFavorite}
-          onShare={handleShare}
-          onDownload={handleDownload}
-        />
       ) : (
         <FileList
           files={data?.files || []}

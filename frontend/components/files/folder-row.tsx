@@ -49,7 +49,7 @@ export function FolderRow({
   return (
     <tr
       className={cn(
-        'hover:bg-accent cursor-pointer transition-colors border-b border-border',
+        'hover:bg-accent cursor-pointer transition-colors',
         isSelected && 'bg-accent'
       )}
       onClick={onClick}

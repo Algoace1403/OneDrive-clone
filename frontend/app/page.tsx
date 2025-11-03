@@ -103,13 +103,16 @@ export default function LandingPage() {
         </button>
       </div>
 
-      {/* Main Hero Content */}
+      {/* Main Hero Content: Three images stacked; first is full-bleed */}
       <main className="relative overflow-hidden">
-      <img 
-              src="/image/img2.png" 
-              alt="Microsoft OneDrive Interface"
-              className="w-full h-auto rounded-lg shadow-2xl"
-            />
+        <Link href="/auth/register">
+          <img
+            src="/image/img2.png"
+            alt="Showcase 1"
+            className="w-screen max-w-none h-auto block cursor-pointer"
+          />
+        </Link>
+        
       </main>
 
       {/* Bottom Navigation Tabs */}
@@ -127,7 +130,7 @@ export default function LandingPage() {
               Overview
             </button>
             <button 
-              onClick={() => setActiveTab('download')}
+              onClick={() => setActiveTab('#')}
               className={`text-sm font-medium pb-4 pt-4 whitespace-nowrap ${
                 activeTab === 'download' 
                   ? 'border-b-2 border-foreground text-foreground' 
@@ -744,106 +747,37 @@ export default function LandingPage() {
         )}
 
         {/* Get the OneDrive mobile app section - Always visible at bottom */}
-        <section className="py-16 bg-gradient-to-br from-blue-50 to-purple-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-light text-gray-900 mb-4">
-                Get the OneDrive mobile app
-              </h2>
-              <p className="text-xl text-gray-700">
-                Access, edit, or share your photos and files from anywhere with the OneDrive mobile app.
-              </p>
-            </div>
-
-            <div className="flex justify-center gap-4 mb-12">
-              <Button className="bg-black text-white px-8 py-3">
-                Download for iOS
-              </Button>
-              <Button variant="outline" className="border-black px-8 py-3">
-                Download for Android™
-              </Button>
-            </div>
-
-            {/* QR Code */}
-            <div className="flex justify-center">
-              <div className="bg-white p-8 rounded-lg shadow-lg">
-                <div className="w-48 h-48 bg-black/5 flex items-center justify-center">
-                  <span className="text-4xl">📱</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Resources Section */}
-        <section className="py-16 bg-gray-100">
-          <div className="container mx-auto px-4">
-            <h2 className="text-sm uppercase tracking-wider text-gray-600 font-medium mb-8">
-              RESOURCES
-            </h2>
-            
-            <div className="grid lg:grid-cols-4 gap-8">
-              <div>
-                <h3 className="font-medium mb-4">What's new</h3>
-                <ul className="space-y-2">
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Surface Pro</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Surface Laptop</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Surface Laptop Studio 2</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Surface Laptop Go 3</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft Copilot</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft 365</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Windows 11 apps</Link></li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-medium mb-4">Microsoft Store</h3>
-                <ul className="space-y-2">
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Account profile</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Download Center</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft Store Support</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Returns</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Order tracking</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Certified Refurbished</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft Store Promise</Link></li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-medium mb-4">Education</h3>
-                <ul className="space-y-2">
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft in education</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Devices for education</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft Teams for Education</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft 365 Education</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Education consultation appointment</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Educator training</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Deals for students and parents</Link></li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-medium mb-4">Business</h3>
-                <ul className="space-y-2">
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft Cloud</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft Security</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Dynamics 365</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft 365</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft Power Platform</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Microsoft Teams</Link></li>
-                  <li><Link href="#" className="text-gray-600 hover:underline text-sm">Copilot for Microsoft 365</Link></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
+        <div className="mx-auto max-w-6xl px-4 py-6">
+        <img
+            src="/image/img7.png"
+            alt="Showcase 2"
+            className="w-full h-auto block mb-6"
+          />
+          <img
+            src="/image/img8.png"
+            alt="Showcase 2"
+            className="w-full h-auto block mb-6"
+          />
+          <img
+            src="/image/img9.png"
+            alt="Showcase 3"
+            className="w-full h-auto block"
+          />
+        </div>
       </div>
 
       {/* Footer */}
       <footer className="bg-gray-100 py-8 border-t">
+        <div>
+        <img
+            src="/image/img10.png"
+            alt="Showcase 3"
+            className="w-full h-auto block"
+          />
+        </div>
         <div className="container mx-auto px-4">
           <p className="text-center text-sm text-gray-600">
-            © 2024 Microsoft OneDrive Clone - Built for demonstration purposes
+            © 2025 Microsoft OneDrive  - Built for demonstration purposes
           </p>
         </div>
       </footer>

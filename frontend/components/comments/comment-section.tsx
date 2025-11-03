@@ -73,7 +73,7 @@ export function CommentSection({ fileId, fileName }: CommentSectionProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center gap-2 p-4 border-b">
+      <div className="flex items-center gap-2 p-4">
         <MessageSquare className="h-5 w-5" />
         <h3 className="font-semibold">Comments</h3>
         <span className="text-sm text-muted-foreground">
@@ -103,7 +103,7 @@ export function CommentSection({ fileId, fileName }: CommentSectionProps) {
         )}
       </ScrollArea>
 
-      <form onSubmit={handleSubmit} className="p-4 border-t">
+      <form onSubmit={handleSubmit} className="p-4">
         <div className="space-y-2">
           <Textarea
             placeholder="Add a comment..."

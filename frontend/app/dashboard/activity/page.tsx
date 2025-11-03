@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { apiClient } from '@/lib/api/client'
 import { formatDate } from '@/lib/utils'
-import { Loader2, File, FolderOpen, Share2, Star, Trash2, RefreshCcw, Filter } from 'lucide-react'
+import { File, FolderOpen, Share2, Star, Trash2, RefreshCcw, Filter } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
@@ -92,8 +92,22 @@ export default function ActivityPage() {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <Loader2 className="h-6 w-6 animate-spin" />
+      <div className="h-full bg-[#0c0c0c] p-6">
+        <div className="mb-3 h-6 w-48 rounded bg-[#1b1b1b] animate-pulse" />
+        <div className="space-y-3">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="rounded bg-[#111] p-3">
+              <div className="flex items-center gap-3">
+                <div className="h-4 w-4 rounded bg-[#2b2b2b] animate-pulse" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-3 w-1/3 rounded bg-[#2b2b2b] animate-pulse" />
+                  <div className="h-2 w-1/5 rounded bg-[#2b2b2b] animate-pulse" />
+                </div>
+                <div className="h-2 w-2 rounded-full bg-[#2b2b2b] animate-pulse" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     )
   }

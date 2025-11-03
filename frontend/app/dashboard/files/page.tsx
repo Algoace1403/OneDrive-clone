@@ -76,7 +76,7 @@ export default function FilesPage() {
   const loadFiles = async () => {
     try {
       setLoading(true)
-      
+
       let endpoint = '/files'
       if (folderId) {
         // Backend expects `parent` as the query param
@@ -85,6 +85,7 @@ export default function FilesPage() {
       if (reqController.current) reqController.current.abort()
       reqController.current = new AbortController()
       const signal = reqController.current.signal
+      const thisController = reqController.current
 
       if (debouncedSearch) {
         endpoint += `${endpoint.includes('?') ? '&' : '?'}q=${encodeURIComponent(searchQuery)}`
@@ -102,11 +103,10 @@ export default function FilesPage() {
       if (sort) {
         endpoint += `${endpoint.includes('?') ? '&' : '?'}sort=${sort.field}&direction=${sort.direction}`
       }
-      
-      const response = await apiClient.get(endpoint, { signal }).catch((e) => {
-        if (e.name === 'CanceledError' || e.code === 'ERR_CANCELED') return { data: {} }
-        throw e
-      })
+
+      const response = await apiClient.get(endpoint, { signal })
+      if (reqController.current !== thisController) return // stale
+
       // Backend returns folders separately under `folders` and regular files under `files`
       const folderItems = response.data.folders || []
       const fileItems = response.data.files || []
@@ -115,9 +115,15 @@ export default function FilesPage() {
       let counts: Record<string, number> = {}
       let favs: Record<string, boolean> = {}
       if (ids.length > 0) {
-        const meta = await apiClient.get(`/files/meta?ids=${ids.join(',')}`, { signal }).catch(() => ({ data: { counts: {}, favorites: {} } }))
-        counts = meta.data?.counts || {}
-        favs = meta.data?.favorites || {}
+        try {
+          const meta = await apiClient.get(`/files/meta?ids=${ids.join(',')}`, { signal })
+          if (reqController.current !== thisController) return // stale
+          counts = meta.data?.counts || {}
+          favs = meta.data?.favorites || {}
+        } catch {
+          counts = {}
+          favs = {}
+        }
       }
       // Attach counts and favorites to items for rendering
       const annotate = (arr: any[]) => arr.map((i) => ({
@@ -128,7 +134,10 @@ export default function FilesPage() {
       setFolders(annotate(folderItems))
       setFiles(annotate(fileItems))
       setShareCounts(counts)
-    } catch (error) {
+      setLoading(false)
+    } catch (error: any) {
+      // Ignore aborted requests to prevent flicker
+      if (error?.name === 'CanceledError' || error?.code === 'ERR_CANCELED') return
       console.error('Error loading files:', error)
       toast({
         title: 'Error',
@@ -137,7 +146,6 @@ export default function FilesPage() {
       })
       setFiles([])
       setFolders([])
-    } finally {
       setLoading(false)
     }
   }

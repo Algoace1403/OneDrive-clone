@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/lib/api/client'
-import { FileGrid } from '@/components/files/file-grid'
 import { FileList } from '@/components/files/file-list'
 import { Button } from '@/components/ui/button'
-import { Loader2, Trash2, RotateCcw, Trash } from 'lucide-react'
+import { Trash2, RotateCcw, Trash } from 'lucide-react'
+import { FileListSkeleton } from '@/components/files/file-list-skeleton'
 import { toast } from '@/lib/hooks/use-toast'
 import {
   AlertDialog,
@@ -21,7 +21,6 @@ import {
 } from '@/components/ui/alert-dialog'
 
 export default function TrashPage() {
-  const viewMode = 'grid' // Default view mode
   const [selectedFiles, setSelectedFiles] = useState<string[]>([])
   const queryClient = useQueryClient()
 
@@ -77,8 +76,8 @@ export default function TrashPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div className="h-full bg-background p-6 ml-4">
+        <FileListSkeleton />
       </div>
     )
   }
@@ -96,18 +95,18 @@ export default function TrashPage() {
   const files = deletedFiles.filter((f: any) => !f.isFolder)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 ml-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Trash2 className="h-6 w-6" />
+        <h1 className="text-sm font-medium flex items-center gap-2">
+          <Trash2 className="h-4 w-4" />
           Trash
         </h1>
         
         {deletedFiles.length > 0 && (
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">
-                <Trash className="mr-2 h-4 w-4" />
+              <Button variant="destructive" size="sm" className="mr-4 text-xs">
+                <Trash className="mr-2 h-3.5 w-3.5" />
                 Empty Trash
               </Button>
             </AlertDialogTrigger>
@@ -147,32 +146,17 @@ export default function TrashPage() {
           <p className="text-sm text-muted-foreground">
             Items in trash will be permanently deleted after 30 days
           </p>
-          
-          {viewMode === 'grid' ? (
-            <FileGrid
-              files={files}
-              folders={folders}
-              selectedFiles={selectedFiles}
-              onFileSelect={setSelectedFiles}
-              onFileClick={() => {}}
-              onDelete={handlePermanentDelete}
-              onFavorite={() => {}}
-              onShare={() => {}}
-              onDownload={() => {}}
-            />
-          ) : (
-            <FileList
-              files={files}
-              folders={folders}
-              selectedFiles={selectedFiles}
-              onFileSelect={setSelectedFiles}
-              onFileClick={() => {}}
-              onDelete={handlePermanentDelete}
-              onFavorite={() => {}}
-              onShare={() => {}}
-              onDownload={() => {}}
-            />
-          )}
+          <FileList
+            files={files}
+            folders={folders}
+            selectedFiles={selectedFiles}
+            onFileSelect={setSelectedFiles}
+            onFileClick={() => {}}
+            onDelete={handlePermanentDelete}
+            onFavorite={() => {}}
+            onShare={() => {}}
+            onDownload={() => {}}
+          />
         </div>
       )}
     </div>

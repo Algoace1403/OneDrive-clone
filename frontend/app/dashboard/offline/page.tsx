@@ -5,7 +5,9 @@ import { apiClient } from '@/lib/api/client'
 import { FileGrid } from '@/components/files/file-grid'
 import { FileList } from '@/components/files/file-list'
 import { useViewMode } from '@/lib/contexts/view-mode-context'
-import { Loader2, WifiOff } from 'lucide-react'
+import { WifiOff } from 'lucide-react'
+import { FileGridSkeleton } from '@/components/files/file-grid-skeleton'
+import { FileListSkeleton } from '@/components/files/file-list-skeleton'
 import { toast } from '@/lib/hooks/use-toast'
 
 export default function OfflinePage() {
@@ -38,7 +40,11 @@ export default function OfflinePage() {
   useEffect(() => { load() }, [])
 
   if (loading) {
-    return <div className="flex h-full items-center justify-center"><Loader2 className="h-6 w-6 animate-spin" /></div>
+    return (
+      <div className="h-full bg-background p-6">
+        {viewMode === 'grid' ? <FileGridSkeleton /> : <FileListSkeleton />}
+      </div>
+    )
   }
 
   if (items.length === 0) {
@@ -89,4 +95,3 @@ export default function OfflinePage() {
     </div>
   )
 }
-

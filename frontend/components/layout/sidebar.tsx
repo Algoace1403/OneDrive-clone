@@ -72,9 +72,9 @@ export function Sidebar() {
   }
 
   return (
-    <div className="flex h-full w-64 flex-col bg-card text-foreground border-r border-border">
+    <div className="flex h-full w-64 flex-col bg-card text-foreground">
       {/* Title Section */}
-      <div className="p-4 border-b border-border">
+      <div className="p-4">
         {/* App launcher, logo, and Photos/Files toggle */}
         <div className="flex items-center gap-2 mb-4">
           <Button
@@ -92,7 +92,7 @@ export function Sidebar() {
             width={36}
             height={8}
           />
-          <div className="ml-auto flex items-center gap-1 bg-secondary rounded p-1">
+          <div className="ml-auto flex items-center gap-1 bg-secondary rounded-full p-1">
             <Button
               variant="ghost"
               size="sm"
@@ -188,7 +188,7 @@ export function Sidebar() {
       </div>
 
       {/* Storage Section */}
-      <div className="mt-auto p-4 border-t border-border">
+      <div className="mt-auto p-4">
         <div className="mb-4">
           <p className="text-xs text-muted-foreground mb-2">
             Get storage for all your files and photos
