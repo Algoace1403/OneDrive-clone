@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "setup:storage": "ts-node src/scripts/setup-storage.ts",
-    "setup:shares": "ts-node src/scripts/setup-public-shares.ts", 
+    "setup:shares": "ts-node src/scripts/setup-public-shares.ts",
     "setup": "npm run setup:storage && npm run setup:shares",
     "smoke": "ts-node src/scripts/smoke.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -30,7 +30,7 @@
     "sharp": "^0.34.4",
     "socket.io": "^4.8.1",
     "tslib": "^2.8.1",
-    "uuid": "^13.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -39,6 +39,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.9.2",
+    "@types/uuid": "^10.0.0",
     "axios": "^1.13.1",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
