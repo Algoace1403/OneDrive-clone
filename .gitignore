@@ -1,0 +1,42 @@
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Node / Package logs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+*.log
+
+# Env files (keep examples)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Build / Dist / Coverage
+dist/
+build/
+coverage/
+out/
+
+# Caches
+.cache/
+.eslintcache
+.parcel-cache/
+.turbo/
+
+# Next.js / Vercel (sub-apps)
+.next/
+.vercel/
+
+# Temporary
+tmp/
+temp/
+.tmp/
+
