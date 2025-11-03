@@ -243,6 +243,14 @@ const startServer = async () => {
   }
 };
 
-startServer();
+// For Vercel deployment
+if (process.env.VERCEL) {
+  // In Vercel, we export the Express app
+  module.exports = app;
+} else {
+  // In local development, start the server normally
+  startServer();
+}
 
 export { io };
+export default app;
