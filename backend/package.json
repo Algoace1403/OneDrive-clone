@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc",
+    "vercel-build": "tsc",
     "start": "node dist/server.js",
     "setup:storage": "ts-node src/scripts/setup-storage.ts",
     "setup:shares": "ts-node src/scripts/setup-public-shares.ts",
