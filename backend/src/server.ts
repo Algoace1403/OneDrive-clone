@@ -60,6 +60,103 @@ app.use('/api/public', publicRoutes); // Public routes (no auth required)
 app.use('/api/health', healthRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Root endpoint - API documentation
+app.get('/', (_req, res) => {
+  const apiDocs = {
+    message: 'OneDrive Clone API',
+    version: '1.0.0',
+    endpoints: {
+      auth: {
+        'POST /api/auth/register': 'Register a new user',
+        'POST /api/auth/login': 'Login user',
+        'POST /api/auth/logout': 'Logout user',
+        'GET /api/auth/me': 'Get current user profile (requires auth)',
+        'PUT /api/auth/profile': 'Update user profile (requires auth)',
+        'POST /api/auth/refresh': 'Refresh access token',
+        'POST /api/auth/reset-password': 'Reset password',
+        'PUT /api/auth/password': 'Update password (requires auth)'
+      },
+      files: {
+        'GET /api/files': 'Get all files and folders',
+        'GET /api/files/:id': 'Get file by ID',
+        'POST /api/files/upload': 'Upload a file',
+        'PUT /api/files/:id': 'Update file metadata',
+        'DELETE /api/files/:id': 'Delete file',
+        'PATCH /api/files/:id/favorite': 'Toggle favorite status',
+        'GET /api/files/:id/download': 'Download file',
+        'GET /api/files/recent': 'Get recent files',
+        'GET /api/files/favorites': 'Get favorite files',
+        'GET /api/files/shared': 'Get shared files',
+        'GET /api/files/shared/by-me': 'Get files shared by me',
+        'GET /api/files/trash': 'Get trashed files',
+        'POST /api/files/:id/restore': 'Restore file from trash',
+        'DELETE /api/files/:id/permanent': 'Permanently delete file',
+        'GET /api/files/search': 'Search files',
+        'GET /api/files/meta': 'Get files metadata',
+        'GET /api/files/favorites/check': 'Check favorite status',
+        'GET /api/files/:id/activity': 'Get file activity',
+        'GET /api/files/:id/versions': 'Get file versions',
+        'POST /api/files/:id/revert': 'Revert to file version',
+        'GET /api/files/:id/comments': 'Get file comments',
+        'POST /api/files/:id/comments': 'Add comment to file',
+        'PUT /api/files/:id/comments/:commentId': 'Update comment',
+        'DELETE /api/files/:id/comments/:commentId': 'Delete comment'
+      },
+      folders: {
+        'POST /api/folders': 'Create a new folder',
+        'PUT /api/folders/:id': 'Update folder',
+        'DELETE /api/folders/:id': 'Delete folder',
+        'GET /api/folders/:id': 'Get folder details'
+      },
+      share: {
+        'POST /api/share/:fileId': 'Share a file',
+        'GET /api/files/:id/shares': 'Get file shares',
+        'DELETE /api/files/shares/:shareId': 'Remove share',
+        'PATCH /api/share/:fileId/:shareId': 'Update share permissions',
+        'GET /api/share/:shareId': 'Get share details'
+      },
+      users: {
+        'GET /api/users': 'Get all users (admin only)',
+        'GET /api/users/search': 'Search users',
+        'GET /api/users/:id': 'Get user by ID',
+        'PUT /api/users/:id': 'Update user',
+        'DELETE /api/users/:id': 'Delete user'
+      },
+      sync: {
+        'POST /api/sync/check': 'Check sync status',
+        'POST /api/sync/update': 'Update sync status',
+        'POST /api/sync/bulk': 'Bulk sync update'
+      },
+      offline: {
+        'POST /api/offline/cache/:fileId': 'Cache file for offline',
+        'DELETE /api/offline/cache/:fileId': 'Remove offline cache',
+        'GET /api/offline/cached': 'Get cached files',
+        'POST /api/offline/sync': 'Sync offline changes'
+      },
+      public: {
+        'GET /api/public/share/:shareId': 'Get public share',
+        'GET /api/public/download/:shareId': 'Download public share'
+      },
+      admin: {
+        'GET /api/admin/stats': 'Get system stats (admin only)',
+        'GET /api/admin/users': 'Get all users (admin only)',
+        'POST /api/admin/users/:id/suspend': 'Suspend user (admin only)',
+        'POST /api/admin/users/:id/unsuspend': 'Unsuspend user (admin only)',
+        'DELETE /api/admin/trash/purge': 'Purge trash (admin only)'
+      },
+      health: {
+        'GET /api/health': 'Health check'
+      }
+    }
+  };
+  res.json(apiDocs);
+});
+
+// API endpoint - API documentation
+app.get('/api', (_req, res) => {
+  res.redirect('/');
+});
+
 // Health check
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'OK', message: 'OneDrive Clone API is running' });
