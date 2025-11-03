@@ -2,6 +2,12 @@
 
 A full-stack cloud storage application built with Next.js, Express, TypeScript, and Supabase, offering file management, sharing, and real-time collaboration features.
 
+## Live Demo
+
+🚀 **Frontend**: https://onedrive-frontend.vercel.app
+
+🔧 **Backend API**: https://onedrive-backend.vercel.app
+
 ## Screenshots
 
 ![Dashboard](frontend/public/image/img3.png)
@@ -81,8 +87,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/onedrive-clone.git
-cd onedrive-clone
+git clone https://github.com/Algoace1403/OneDrive-clone.git
+cd OneDrive-clone
 ```
 
 2. Install backend dependencies
