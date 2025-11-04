@@ -16,11 +16,11 @@ build/
 .cache/
 .eslintcache
 
-# Env files (keep examples)
-.env
-.env.local
-.env.*.local
-!.env.example
+# # Env files (keep examples)
+# .env
+# .env.local
+# .env.*.local
+# !.env.example
 
 # Logs
 logs/
