@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneDrive Clone - API Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0078d4;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #0078d4;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #106ebe;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #e8f5e9;
+            border: 1px solid #4caf50;
+            white-space: pre-wrap;
+            display: none;
+        }
+        .error {
+            background-color: #ffebee;
+            border-color: #f44336;
+        }
+        .demo-accounts {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 5px;
+            border: 1px solid #2196f3;
+        }
+        .demo-accounts h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        .account-list {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 OneDrive Clone API Test</h1>
+        
+        <div class="form-group">
+            <label for="account">Select Demo Account:</label>
+            <select id="account">
+                <option value='{"email":"demo@outlook.com","password":"DemoPass123!"}'>Demo User</option>
+                <option value='{"email":"john.doe@outlook.com","password":"JohnPass123!"}'>John Doe</option>
+                <option value='{"email":"jane.smith@outlook.com","password":"JanePass123!"}'>Jane Smith</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" value="demo@outlook.com" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" value="DemoPass123!" />
+        </div>
+
+        <button onclick="testLogin()">Test Login</button>
+
+        <div id="result" class="result"></div>
+
+        <div class="demo-accounts">
+            <h3>📝 Demo Accounts</h3>
+            <div class="account-list">
+                <strong>Demo User:</strong> demo@outlook.com / DemoPass123!<br>
+                <strong>John Doe:</strong> john.doe@outlook.com / JohnPass123!<br>
+                <strong>Jane Smith:</strong> jane.smith@outlook.com / JanePass123!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5001/api';
+
+        // Update form when dropdown changes
+        document.getElementById('account').addEventListener('change', function(e) {
+            const account = JSON.parse(e.target.value);
+            document.getElementById('email').value = account.email;
+            document.getElementById('password').value = account.password;
+        });
+
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+
+            try {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result';
+                resultDiv.textContent = '⏳ Testing login...';
+
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Test authenticated endpoint
+                    const filesResponse = await fetch(`${API_URL}/files`, {
+                        headers: {
+                            'Authorization': `Bearer ${data.token}`
+                        }
+                    });
+                    const files = await filesResponse.json();
+
+                    resultDiv.textContent = `✅ Login Successful!
+
+👤 User: ${data.user.name}
+📧 Email: ${data.user.email}
+💾 Storage: ${(data.user.storageUsed / 1024 / 1024).toFixed(2)} MB / ${(data.user.storageLimit / 1024 / 1024 / 1024).toFixed(2)} GB
+🔑 Token: ${data.token.substring(0, 50)}...
+📁 Files: ${files.length || 0} files found
+
+🎉 You can now use this token to access the OneDrive Clone API!`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Login Failed: ${data.error || 'Unknown error'}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        // Test login on page load
+        window.onload = () => {
+            console.log('OneDrive Clone API Test Page Ready');
+            console.log('API URL:', API_URL);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+env file for the backend 
+
+PORT=5001
+NODE_ENV=development
+
+SUPABASE_URL=https://ncvbktsmdmujfkdwytwk.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jdmJrdHNtZG11amZrZHd5dHdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwNDY4ODgsImV4cCI6MjA3NzYyMjg4OH0.zCLH7u6x77TrmhLdLzJpEhrE8jwsLsfy0JY7rY9gsD0
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jdmJrdHNtZG11amZrZHd5dHdrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjA0Njg4OCwiZXhwIjoyMDc3NjIyODg4fQ.wX5vN0wnwHseJ4jhXNFDjAdNTX3WXendteoqaWNSVdM
+
+FRONTEND_URL=http://localhost:3000
+CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+MAX_FILE_SIZE=5368709120
+ALLOWED_FILE_TYPES=image/*,application/pdf,text/*,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/zip,application/x-zip-compressed,video/*,audio/*
+
