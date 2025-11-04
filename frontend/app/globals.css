@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 20%;
+    --primary: 206 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 20%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 206 100% 96%;
+    --accent-foreground: 206 100% 50%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 206 100% 50%;
+    --radius: 0.25rem;
+    
+    /* OneDrive specific colors */
+    --onedrive-blue: 206 100% 50%;
+    --onedrive-hover: 206 100% 45%;
+    --onedrive-selected: 206 100% 96%;
+    --command-bar-bg: 0 0% 98%;
+  }
+
+  .dark {
+    --background: 0 0% 10%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 206 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 206 100% 20%;
+    --accent-foreground: 206 100% 50%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 206 100% 50%;
+  }
+
+  /* Black & White (Monochrome) Theme */
+  .bw {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 92%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 35%;
+    --accent: 0 0% 90%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 0% 20%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 0 0% 0%;
+    --onedrive-blue: 0 0% 0%; /* Treat primary accents as black */
+    --onedrive-hover: 0 0% 20%;
+    --onedrive-selected: 0 0% 92%;
+    --command-bar-bg: 0 0% 96%;
+  }
+
+  .bw.dark {
+    --background: 0 0% 8%;
+    --foreground: 0 0% 92%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 92%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 92%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 92%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 18%;
+    --accent-foreground: 0 0% 92%;
+    --destructive: 0 0% 35%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 0 0% 100%;
+    --onedrive-blue: 0 0% 100%;
+    --onedrive-hover: 0 0% 80%;
+    --onedrive-selected: 0 0% 14%;
+    --command-bar-bg: 0 0% 12%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom scrollbar - OneDrive style */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/20 rounded-full;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/40;
+}
+
+/* OneDrive specific styles */
+.command-bar {
+  @apply bg-[hsl(var(--command-bar-bg))] border-b px-4 py-2;
+}
+
+.file-tile {
+  @apply hover:bg-[hsl(var(--onedrive-selected))];
+}
+
+.file-tile.selected {
+  @apply bg-[hsl(var(--onedrive-selected))] border-2 border-[hsl(var(--onedrive-blue))];
+}
+
+/* File type colors - Microsoft style */
+.file-icon-word { color: #2b579a; }
+.file-icon-excel { color: #217346; }
+.file-icon-powerpoint { color: #d24726; }
+.file-icon-pdf { color: #d32f2f; }
+.file-icon-image { color: #28a745; }
+.file-icon-video { color: #9c27b0; }
+.file-icon-audio { color: #ff9800; }
+.file-icon-code { color: #0066cc; }
+.file-icon-archive { color: #6c757d; }
+
+/* OneDrive tile hover effects */
+.file-tile-hover {
+  @apply transition-all duration-150 ease-in-out;
+}
+
+.file-tile-hover:hover {
+  @apply shadow-md scale-[1.02];
+}
+
+/* Command button style */
+.command-button {
+  @apply px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-accent rounded-sm transition-colors;
+}
+
+/* Details panel animation */
+.details-panel {
+  @apply transition-transform duration-200 ease-in-out;
+}
+
+.details-panel.open {
+  @apply translate-x-0;
+}
+
+.details-panel.closed {
+  @apply translate-x-full;
+}
+
+/* Fade in animation for expandable sections */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
